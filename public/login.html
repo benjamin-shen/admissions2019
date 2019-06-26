@@ -4,26 +4,14 @@
         <title>Login</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="style.css">
+        <script type="text/javascript" src="validate"></script>
     </head>
     <body>
         <h1>Login</h1>
-        <form name="login" method="post">
+        <form name="login" method="post" onsubmit="validate(this)">
             Enter password:
-            <input id="pwd" type="password">
-            <input type="button" value="Submit" onclick="validate()">
+            <input name="pwd" type="password">
+            <input type="submit" value="Submit">
         </form>
-        <p id="result"></p>
-        <script>
-            function validate() {
-                var pwd = document.getElementById("pwd").value;
-                var text;
-                if (pwd == process.env.PASSWORD) {
-                    text = "Right Password";
-                } else {
-                    text = "Wrong Password";
-                }
-                document.getElementById("result").innerHTML = text;
-            }
-        </script>
     </body>
 </html>
