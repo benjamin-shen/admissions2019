@@ -1,0 +1,15 @@
+{
+  "name": "project_testing",
+  "version": "1.0.0",
+  "description": "Template for testing projects.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "dev": "nodemon index"
+  },
+  "author": "Benjamin Shen",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}
