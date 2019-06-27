@@ -1,12 +1,15 @@
 const http = require('http');
 const path = require('path');
 const fs = require('fs');
+var auth = require('http-auth');
+var basic = auth.basic({
+    file: "pw.htpasswd",
+});
 
-const server = http.createServer((req, res) => {
+const server = http.createServer(basic, (req, res) => {
     let filePath = path.join(__dirname, 'public', 
     req.url === '/' ? 'index.html' : 
-    req.url === '/login' ? 'login.html' : 
-    req.url === '/validate' ? 'validate.js' :
+    req.url === '/test' ? 'test.html' : 
     'error.html');
     let extname = path.extname(filePath);
     let contentType = 'text/html';
