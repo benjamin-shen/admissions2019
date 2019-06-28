@@ -3,11 +3,13 @@
         <meta charset="utf-8">
         <title>Project Testing</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <style>
             h1 {
                 text-align: center;
             }
         </style>
+        
     </head>
     <body>
         <h1>Project Testing</h1>
@@ -17,5 +19,11 @@
                 <input type="submit" value="Save">
             </form>
         </div>
+        <button onclick="get()">GET</button>
+        <script type="application/javascript">
+            function get() {
+                window.location.replace("sheets");
+            }
+        </script>
     </body>
 </html>
