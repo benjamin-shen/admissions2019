@@ -13,11 +13,10 @@
     "nodemon": "^1.19.1"
   },
   "dependencies": {
-    "dotenv": "^8.0.0",
     "express": "^4.17.1",
     "google-spreadsheet": "^2.0.7",
     "http-auth": "^3.2.3",
-    "require": "^2.4.20",
+    "querystring": "^0.2.0",
     "temp": "^0.9.0"
   }
 }
