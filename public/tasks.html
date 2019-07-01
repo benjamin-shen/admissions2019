@@ -45,6 +45,9 @@
             padding: 5px 7px;
             font-family: Calibri, Arial, sans-serif;
         }
+        button {
+            padding: 3px;
+        }
         .scenario {
             display: inline-block;
             margin: 6px 4px;
@@ -63,7 +66,7 @@
             text-align: center;
         }
         #tasks {
-            margin: 0px auto;
+            margin: 10px auto;
             border: 1px solid black;
             border-collapse: collapse;
         }
@@ -84,11 +87,39 @@
     <body>
         <div id="container">
             <a href="."><h1>Project Testing</h1></a>
-            <p id="alert">Click the header to reload the page.</p>
+            <p id="alert">Click the header to reload the data.</p>
             <table id="tasks" border="1">
                 <tr>
-                    <td>${number}</td>
-                    <td>${title}</td>
-                    <td>edit button</td>
+                    <td><b>0</b></td>
+                    <td><a href="www.google.com">ab</a></td>
+                    <td>
+                        <form action="." method="post">
+                            <input type="hidden" name="task" value="0">
+                            <button type="submit">Edit</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>1</b></td>
+                    <td><a href="">it works!</a></td>
+                    <td>
+                        <form action="." method="post">
+                            <input type="hidden" name="task" value="1">
+                            <button type="submit">Edit</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>2</b></td>
+                    <td><a href="">black magic</a></td>
+                    <td>
+                        <form action="." method="post">
+                            <input type="hidden" name="task" value="2">
+                            <button type="submit">Edit</button>
+                        </form>
+                    </td>
                 </tr>
             </table>
+        </div>
+    </body>
+</html>

@@ -35,34 +35,45 @@ const fs = require('fs');
 const server = http.createServer(basic, (req, res) => {
     if(req.method == 'POST') {
         processPost(req, res, function() {
-            var data = req.post;
-            updateSpreadsheet(data);
+            const data = req.post;
+            if(data['title']!=null) {
+                const row = parseInt(data['number']);
+                updateSpreadsheet(row,data);
+                setTimeout(readSpreadsheet, 3000);
+            }
+            else if(data['task']!=null) {
+                readRow(parseInt(data['task']));
+                req.url = '/test';
+            }
         });
     }
-    let filePath = path.join(__dirname, 'public', 
-    req.url === '/' ? 'index.html' : 
-    req.url === '/test' ? 'test.html' : 
-    req.url === '/delete.html' ? 'delete.html' :
-    'error.html');
-    let extname = path.extname(filePath);
-    var contentType = 'text/plain';
-    switch(extname) {
-        case '.html':
-            contentType = 'text/html';
-            break;
-        case '.css':
-            contentType = 'text/css';
-            break;
-        case '.js':
-            contentType = 'application/javascript';
-            break;
-    }
-    setTimeout(readSpreadsheet, 3000);
-    fs.readFile(filePath, (err, content) => {
-        if (err) throw err;
-        res.writeHead(200, {'Content-Type': contentType});
-        res.end(content);
-    });
+    setInterval(readSpreadsheet, 600000); // reload every 10 minutes
+    setTimeout(function() {
+        let filePath = path.join(__dirname, 'public', 
+        req.url === '/' ? 'index.html' : 
+        req.url === '/tasks' ? 'tasks.html' : 
+        req.url === '/test' ? 'test.html' : 
+        req.url === '/delete.html' ? 'delete.html' :
+        'error.html');
+        let extname = path.extname(filePath);
+        var contentType = 'text/plain';
+        switch(extname) {
+            case '.html':
+                contentType = 'text/html';
+                break;
+            case '.css':
+                contentType = 'text/css';
+                break;
+            case '.js':
+                contentType = 'application/javascript';
+                break;
+        }
+        fs.readFile(filePath, (err, content) => {
+            if (err) throw err;
+            res.writeHead(200, {'Content-Type': contentType});
+            res.end(content);
+        });
+    }, 1000);
 });
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
@@ -79,39 +90,45 @@ async function readSpreadsheet() {
     const rows = await promisify(sheet.getRows)({
         offset: 1,
     });
-    fs.writeFile('public/test.html', testHTML(rows), function(err) {
+    fs.writeFile('public/tasks.html', tasks(rows), function(err) {
         if(err) throw err;
     });
     fs.writeFile('public/view.html', view(rows), function(err) {
         if(err) throw err;
     });
-    fs.writeFile('public/failed.html', viewFailed(rows), function(err) {
+    fs.writeFile('public/failed.html', failed(rows), function(err) {
         if(err) throw err;
     });
 }
-async function updateSpreadsheet(data) {
+async function readRow(taskNum) {
+    const doc = new GoogleSpreadsheet('1BMPc6UQFxgwS1I6yEHt-RNe241-LmZx1eZEjyzlPLbA');
+    await promisify(doc.useServiceAccountAuth)(creds);
+    const info = await promisify(doc.getInfo)();
+    const sheet = info.worksheets[0];
+    const rows = await promisify(sheet.getRows)({
+        offset: 1,
+    });
+    fs.writeFile('public/test.html', test(rows,taskNum), function(err) {
+        if(err) throw err;
+    });
+}
+async function updateSpreadsheet(row,data) {
     const doc = new GoogleSpreadsheet('1BMPc6UQFxgwS1I6yEHt-RNe241-LmZx1eZEjyzlPLbA');
     await promisify(doc.useServiceAccountAuth)(creds);
     const info = await promisify(doc.getInfo)();
     const sheet = info.worksheets[0];
     sheet.getCells({
-        'min-row': 2,
+        'min-row': 2 + row,
         'min-col': 2,
         'return-empty': true,
     }, function(err, cells) {
         if(err) throw err;
-        var j=0;
-        for(var i=0; i<cells.length; i+=6) {
-            cells[i].value = data['title'][i];
-            cells[i+1].value = data['dependencies'][i];
-            cells[i+2].value = data['steps'][i];
-            cells[i+3].value = data['expectedresults'][i];
-            if(data[`passed${j}`]!=null) {
-                cells[i+4].value = data[`passed${j}`];
-            }
-            cells[i+5].value = data['actualresults'][i];
-            j++;
-        }
+        cells[0].value = data['title'];
+        cells[1].value = data['dependencies'];
+        cells[2].value = data['steps'];
+        cells[3].value = data['expectedresults'];
+        cells[4].value = data['passed'];
+        cells[5].value = data['actualresults'];
         sheet.bulkUpdateCells(cells);
     })
 }
@@ -163,6 +180,9 @@ var htmlTemplate = `<!DOCTYPE html>
             padding: 5px 7px;
             font-family: Calibri, Arial, sans-serif;
         }
+        button {
+            padding: 3px;
+        }
         .scenario {
             display: inline-block;
             margin: 6px 4px;
@@ -180,6 +200,14 @@ var htmlTemplate = `<!DOCTYPE html>
         #alert {
             text-align: center;
         }
+        #tasks {
+            margin: 10px auto;
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        #tasks td {
+            padding: 5px;
+        }
         #save {
             display: block;
             margin: 4px auto 10px auto;
@@ -194,45 +222,71 @@ var htmlTemplate = `<!DOCTYPE html>
     <body>
         <div id="container">
             <a href="."><h1>Project Testing</h1></a>
-            <p id="alert">Please save frequently! Click the header to reload the page.</p>`;
-function testHTML(data) {
-    var result = htmlTemplate + `
-            <form method="post" action="..">`;
+            <p id="alert">Click the header to reload the data.</p>`;
+function tasks(data) {
+    var result = htmlTemplate;
+    result += `
+            <table id="tasks" border="1">`
     for(var i=0; i<data.length; i++) {
         const row = data[i];
+        const number = safe(row['number']);
         const title = safe(row['title']);
-        const dependencies = safe(row['dependencies']);
-        const steps = safe(row['steps']);
-        const expectedresults = safe(row['expectedresults']);
-        var scenario = `
+        const link = safe(row['link']);
+        result += `
+                <tr>
+                    <td><b>${number}</b></td>
+                    <td><a href="${link}">${title}</a></td>
+                    <td>
+                        <form action="." method="post">
+                            <input type="hidden" name="task" value="${number}">
+                            <button type="submit">Edit</button>
+                        </form>
+                    </td>
+                </tr>`;
+    }
+    result += `
+            </table>
+        </div>
+    </body>\n</html>`;
+    return result;
+}
+function test(data,taskNum) {
+    var result = htmlTemplate + `
+            <form method="post" action="..">`;
+    const i = taskNum;
+    const row = data[i];
+    const title = safe(row['title']);
+    const dependencies = safe(row['dependencies']);
+    const steps = safe(row['steps']);
+    const expectedresults = safe(row['expectedresults']);
+    var scenario = `
                 <div class="scenario">
-                    <p>Number: ${i+1}</p>
+                    <p>Number: ${i+1}<input type="hidden" name="number" value="${i}"></p>
                     <p>Title: <input type="text" name="title" value="${title}" size="45"></p>
                     <p>Pre-Condition/Dependencies:<br /><textarea name="dependencies" rows="5" cols="50">${dependencies}</textarea></p>
                     <p>Steps:<br /><textarea name="steps" rows="5" cols="50">${steps}</textarea></p>
                     <p>Expected Results:<br /><textarea name="expectedresults" rows="5" cols="50">${expectedresults}</textarea></p>`;
-        const passed = safe(row['passed']);
-        if (passed=='TRUE') {
-            scenario += `
-                    <p><input type="radio" id="pass${i}" name="passed${i}" value="TRUE" checked> <label for="pass${i}">Pass</label>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" id="fail${i}" name="passed${i}" value="FALSE"> <label for="fail${i}">Fail</label></p>`;
-        }
-        else if (passed=='FALSE') {
-            scenario += `
-                    <p><input type="radio" id="pass${i}" name="passed${i}" value="TRUE"> <label for="pass${i}">Pass</label>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" id="fail${i}" name="passed${i}" value="FALSE" checked> <label for="fail${i}">Fail</label></p>`;
-        }
-        else {
-            scenario += `
-                    <p><input type="radio" id="pass${i}" name="passed${i}" value="TRUE"> <label for="pass${i}">Pass</label>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" id="fail${i}" name="passed${i}" value="FALSE"> <label for="fail${i}">Fail</label></p>`;
-        }
-        const actualresults = safe(row['actualresults']);
+    const passed = safe(row['passed']);
+    if (passed=='TRUE') {
         scenario += `
-                    <p id="actualresults${i}" style="display:hidden">Actual Results (if failed):<br /><textarea name="actualresults" rows="5" cols="50" class="actualresults">${actualresults}</textarea></p>
-                </div>`;
-        result += scenario;
+                    <p><input type="radio" id="pass" name="passed" value="TRUE" checked> <label for="pass">Pass</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="fail" name="passed" value="FALSE"> <label for="fail">Fail</label></p>`;
     }
+    else if (passed=='FALSE') {
+        scenario += `
+                    <p><input type="radio" id="pass" name="passed" value="TRUE"> <label for="pass">Pass</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="fail" name="passed" value="FALSE" checked> <label for="fail">Fail</label></p>`;
+    }
+    else {
+        scenario += `
+                    <p><input type="radio" id="pass" name="passed" value="TRUE"> <label for="pass">Pass</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="fail" name="passed" value="FALSE"> <label for="fail">Fail</label></p>`;
+    }
+    const actualresults = safe(row['actualresults']);
+    scenario += `
+                    <p id="actualresults">Actual Results (if failed):<br /><textarea name="actualresults" rows="5" cols="50" class="actualresults">${actualresults}</textarea></p>
+                </div>`;
+    result += scenario;
     result += `
                 <input type="submit" id="save" value="Save">
             </form>
@@ -241,10 +295,9 @@ function testHTML(data) {
     return result;
 }
 function view(data) {
-    var result = htmlTemplate;
-    return result;
+    return "incomplete";
 }
-function viewFailed(data) {
+function failed(data) {
     return "incomplete";
 }
 function safe(text) { // prevent html injection
