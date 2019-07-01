@@ -2,6 +2,7 @@ node_modules
 bin
 .env
 
+public/tasks.html
 public/test.html
 public/view.html
 public/failed.html

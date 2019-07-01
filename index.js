@@ -33,13 +33,14 @@ const http = require('http');
 const path = require('path');
 const fs = require('fs');
 const server = http.createServer(basic, (req, res) => {
+    readSpreadsheet();
     if(req.method == 'POST') {
         processPost(req, res, function() {
             const data = req.post;
             if(data['title']!=null) {
                 const row = parseInt(data['number']);
                 updateSpreadsheet(row,data);
-                setTimeout(readSpreadsheet, 3000);
+                setTimeout(readSpreadsheet, 3500);
             }
             else if(data['task']!=null) {
                 readRow(parseInt(data['task']));
@@ -47,7 +48,6 @@ const server = http.createServer(basic, (req, res) => {
             }
         });
     }
-    setInterval(readSpreadsheet, 600000); // reload every 10 minutes
     setTimeout(function() {
         let filePath = path.join(__dirname, 'public', 
         req.url === '/' ? 'index.html' : 
@@ -131,6 +131,27 @@ async function updateSpreadsheet(row,data) {
         cells[5].value = data['actualresults'];
         sheet.bulkUpdateCells(cells);
     })
+}
+async function newRow(data) {
+    const doc = new GoogleSpreadsheet('1BMPc6UQFxgwS1I6yEHt-RNe241-LmZx1eZEjyzlPLbA');
+    await promisify(doc.useServiceAccountAuth)(creds);
+    const info = await promisify(doc.getInfo)();
+    const sheet = info.worksheets[0];
+    const row = {
+        title: data['title'],
+        dependencies: data['dependencies'],
+        steps: data['steps'],
+        expectedresults: data['expectedresults'],
+        passed: data['passed'],
+        actualresults: data['actualresults'],
+    }
+    await promisify(sheet.addRow)(row);
+    const cell = [{
+        row: info.rowCount,
+        col: 1,
+        formula: '=ROW()-2',
+    }]
+    await promisify(sheet.bulkUpdateCells)(cell);
 }
 
 var htmlTemplate = `<!DOCTYPE html>
@@ -234,8 +255,21 @@ function tasks(data) {
         const link = safe(row['link']);
         result += `
                 <tr>
-                    <td><b>${number}</b></td>
-                    <td><a href="${link}">${title}</a></td>
+                    <td><b>${number}</b></td>`
+        const passed = safe(row['passed']);
+        if (passed=='TRUE') {
+            result += `
+                    <td style="background:palegreen">`;
+        }
+        else if (passed=='FALSE') {
+            result += `
+                    <td style="background:crimson">`;
+        }
+        else {
+            result += `
+                    <td>`;
+        }
+        result += `<a href="${link}">${title}</a></td>
                     <td>
                         <form action="." method="post">
                             <input type="hidden" name="task" value="${number}">
