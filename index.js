@@ -269,7 +269,7 @@ function tasks(data) {
             result += `
                     <td>`;
         }
-        result += `<a href="${link}">${title}</a></td>
+        result += `<a href="${link}" target="_blank">${title}</a></td>
                     <td>
                         <form action="." method="post">
                             <input type="hidden" name="task" value="${number}">
