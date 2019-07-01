@@ -57,7 +57,7 @@ const server = http.createServer(basic, (req, res) => {
             contentType = 'application/javascript';
             break;
     }
-    setTimeout(readSpreadsheet, 1000);
+    setTimeout(readSpreadsheet, 3000);
     fs.readFile(filePath, (err, content) => {
         if (err) throw err;
         res.writeHead(200, {'Content-Type': contentType});
