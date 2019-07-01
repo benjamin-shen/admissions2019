@@ -4,143 +4,110 @@
         <title>Project Testing</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <style>
-            * {
-                margin: 0px;
-                padding: 0px;
-            }
-            body {
-                font-family: Calibri, Arial, sans-serif;
-                font-size: 16px;
-            }
-            h1 {
-                font-family: 'Trebuchet MS', 'Lucida Sans', sans-serif;
-                font-size: 36px;
-                text-align: center;
-                background: #eeeeee;
-                padding: 10px 0px;
-                width: 100%;
-            }
-            p {
-                margin: 5px;
-            }
-            a {
-                color: inherit;
-                text-decoration: none;
-            }
-            a:hover {
-                cursor: pointer;
-            }
-            textarea {
-                vertical-align: middle;
-            }
-            .scenario {
-                margin: 10px 15px;
-                padding: 9px;
-                width: calc(100% - 50px);
-                border: 1px solid black;
-                border-radius: 5px;
-            }
-            #container {
-                display: inline-block;
-                min-width: 100%;
-            }
-            #alert {
-                text-align: center;
-            }
-            #save {
-                display: block;
-                margin: 0px auto 10px auto;
-                padding: 5px 10px;
-                border: none;
-                border-radius: 10px;
-                font-size: 18px;
-            }
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 16px;
+            background: #eeeeee;
+        }
+        h1 {
+            font-family: 'Trebuchet MS', 'Lucida Sans', sans-serif;
+            font-size: 36px;
+            background: lightgray;
+            padding: 10px 0px;
+            width: 100%;
+            text-align: center;
+        }
+        p {
+            margin: 5px;
+        }
+        tr {
+            margin: 0px auto;
+        }
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+        a:hover {
+            cursor: pointer;
+        }
+        input {
+            padding: 5px;
+            font-family: Calibri, Arial, sans-serif;
+            vertical-align: middle;
+        }
+        textarea {
+            vertical-align: top;
+            margin: 3px 10px;
+            padding: 5px 7px;
+            font-family: Calibri, Arial, sans-serif;
+        }
+        .scenario {
+            display: inline-block;
+            margin: 6px 4px;
+            padding: 9px;
+            border: 1px;
+            background: white;
+        }
+        #container {
+            display: inline-block;
+            text-align: center;
+            background: #eeeeee;
+            width: 100%;
+            min-height: 100%;
+        }
+        #alert {
+            text-align: center;
+        }
+        #save {
+            display: block;
+            margin: 4px auto 10px auto;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-family: 'Segoe UI', serif;
+        }
         </style>
     </head>
     <body>
         <div id="container">
-            <a href="/"><h1>Project Testing</h1></a>
+            <a href="."><h1>Project Testing</h1></a>
             <p id="alert">Please save frequently! Click the header to reload the page.</p>
             <form method="post" action="..">
                 <div class="scenario">
                     <p>Number: 1</p>
-                    <p>Title: <input type="text" name="title0" value="title"></p>
-                    <p>Pre-Condition/Dependencies: <input type="text" name="dependencies0" value="dependencies"></p>
-                    <p>Steps: <textarea name="steps0" rows="5" cols="50">steps</textarea></p>
-                    <p>Expected Results: <textarea name="expectedresults0" rows="5" cols="50">Expected Results</textarea></p>
-                    <p><input type="radio" id="pass0" name="pass/fail0"> <label for="pass0">Pass</label><br />
-                    <input type="radio" id="fail0" name="pass/fail0"> <label for="fail0">Fail</label></p>
-                    <p id="actualresults0"></p>
+                    <p>Title: <input type="text" name="title" value="YO" size="45"></p>
+                    <p>Pre-Condition/Dependencies:<br /><textarea name="dependencies" rows="5" cols="50">;)
+</textarea></p>
+                    <p>Steps:<br /><textarea name="steps" rows="5" cols="50">asdf</textarea></p>
+                    <p>Expected Results:<br /><textarea name="expectedresults" rows="5" cols="50">zzzzz</textarea></p>
+                    <p><input type="radio" id="pass0" name="passed0" value="TRUE" checked> <label for="pass0">Pass</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="fail0" name="passed0" value="FALSE"> <label for="fail0">Fail</label></p>
+                    <p id="actualresults0" style="display:hidden">Actual Results (if failed):<br /><textarea name="actualresults" rows="5" cols="50" class="actualresults">YAY</textarea></p>
                 </div>
                 <div class="scenario">
                     <p>Number: 2</p>
-                    <p>Title: <input type="text" name="title1" value=""></p>
-                    <p>Pre-Condition/Dependencies: <input type="text" name="dependencies1" value=""></p>
-                    <p>Steps: <textarea name="steps1" rows="5" cols="50"></textarea></p>
-                    <p>Expected Results: <textarea name="expectedresults1" rows="5" cols="50"></textarea></p>
-                    <p><input type="radio" id="pass1" name="pass/fail1"> <label for="pass1">Pass</label><br />
-                    <input type="radio" id="fail1" name="pass/fail1"> <label for="fail1">Fail</label></p>
-                    <p id="actualresults1"></p>
+                    <p>Title: <input type="text" name="title" value="" size="45"></p>
+                    <p>Pre-Condition/Dependencies:<br /><textarea name="dependencies" rows="5" cols="50"></textarea></p>
+                    <p>Steps:<br /><textarea name="steps" rows="5" cols="50"></textarea></p>
+                    <p>Expected Results:<br /><textarea name="expectedresults" rows="5" cols="50"></textarea></p>
+                    <p><input type="radio" id="pass1" name="passed1" value="TRUE"> <label for="pass1">Pass</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="fail1" name="passed1" value="FALSE"> <label for="fail1">Fail</label></p>
+                    <p id="actualresults1" style="display:hidden">Actual Results (if failed):<br /><textarea name="actualresults" rows="5" cols="50" class="actualresults"></textarea></p>
                 </div>
                 <div class="scenario">
                     <p>Number: 3</p>
-                    <p>Title: <input type="text" name="title2" value=""></p>
-                    <p>Pre-Condition/Dependencies: <input type="text" name="dependencies2" value=""></p>
-                    <p>Steps: <textarea name="steps2" rows="5" cols="50"></textarea></p>
-                    <p>Expected Results: <textarea name="expectedresults2" rows="5" cols="50"></textarea></p>
-                    <p><input type="radio" id="pass2" name="pass/fail2"> <label for="pass2">Pass</label><br />
-                    <input type="radio" id="fail2" name="pass/fail2"> <label for="fail2">Fail</label></p>
-                    <p id="actualresults2"></p>
-                </div>
-                <div class="scenario">
-                    <p>Number: 4</p>
-                    <p>Title: <input type="text" name="title3" value=""></p>
-                    <p>Pre-Condition/Dependencies: <input type="text" name="dependencies3" value=""></p>
-                    <p>Steps: <textarea name="steps3" rows="5" cols="50"></textarea></p>
-                    <p>Expected Results: <textarea name="expectedresults3" rows="5" cols="50"></textarea></p>
-                    <p><input type="radio" id="pass3" name="pass/fail3"> <label for="pass3">Pass</label><br />
-                    <input type="radio" id="fail3" name="pass/fail3"> <label for="fail3">Fail</label></p>
-                    <p id="actualresults3"></p>
-                </div>
-                <div class="scenario">
-                    <p>Number: 5</p>
-                    <p>Title: <input type="text" name="title4" value=""></p>
-                    <p>Pre-Condition/Dependencies: <input type="text" name="dependencies4" value=""></p>
-                    <p>Steps: <textarea name="steps4" rows="5" cols="50"></textarea></p>
-                    <p>Expected Results: <textarea name="expectedresults4" rows="5" cols="50"></textarea></p>
-                    <p><input type="radio" id="pass4" name="pass/fail4"> <label for="pass4">Pass</label><br />
-                    <input type="radio" id="fail4" name="pass/fail4"> <label for="fail4">Fail</label></p>
-                    <p id="actualresults4"></p>
-                </div>
-                <div class="scenario">
-                    <p>Number: 6</p>
-                    <p>Title: <input type="text" name="title5" value=""></p>
-                    <p>Pre-Condition/Dependencies: <input type="text" name="dependencies5" value=""></p>
-                    <p>Steps: <textarea name="steps5" rows="5" cols="50"></textarea></p>
-                    <p>Expected Results: <textarea name="expectedresults5" rows="5" cols="50"></textarea></p>
-                    <p><input type="radio" id="pass5" name="pass/fail5"> <label for="pass5">Pass</label><br />
-                    <input type="radio" id="fail5" name="pass/fail5"> <label for="fail5">Fail</label></p>
-                    <p id="actualresults5"></p>
-                </div>
-                <div class="scenario">
-                    <p>Number: 7</p>
-                    <p>Title: <input type="text" name="title6" value=""></p>
-                    <p>Pre-Condition/Dependencies: <input type="text" name="dependencies6" value=""></p>
-                    <p>Steps: <textarea name="steps6" rows="5" cols="50"></textarea></p>
-                    <p>Expected Results: <textarea name="expectedresults6" rows="5" cols="50"></textarea></p>
-                    <p><input type="radio" id="pass6" name="pass/fail6"> <label for="pass6">Pass</label><br />
-                    <input type="radio" id="fail6" name="pass/fail6"> <label for="fail6">Fail</label></p>
-                    <p id="actualresults6"></p>
-                </div>
-                <div class="scenario">
-                    <p>Number: 8</p>
-                    <p>Title: <input type="text" name="title7" value=""></p>
-                    <p>Pre-Condition/Dependencies: <input type="text" name="dependencies7" value=""></p>
-                    <p>Steps: <textarea name="steps7" rows="5" cols="50"></textarea></p>
-                    <p>Expected Results: <textarea name="expectedresults7" rows="5" cols="50"></textarea></p>
-                    <p><input type="radio" id="pass7" name="pass/fail7"> <label for="pass7">Pass</label><br />
-                    <input type="radio" id="fail7" name="pass/fail7"> <label for="fail7">Fail</label></p>
-                    <p id="actualresults7"></p>
+                    <p>Title: <input type="text" name="title" value="" size="45"></p>
+                    <p>Pre-Condition/Dependencies:<br /><textarea name="dependencies" rows="5" cols="50"></textarea></p>
+                    <p>Steps:<br /><textarea name="steps" rows="5" cols="50"></textarea></p>
+                    <p>Expected Results:<br /><textarea name="expectedresults" rows="5" cols="50"></textarea></p>
+                    <p><input type="radio" id="pass2" name="passed2" value="TRUE"> <label for="pass2">Pass</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="fail2" name="passed2" value="FALSE"> <label for="fail2">Fail</label></p>
+                    <p id="actualresults2" style="display:hidden">Actual Results (if failed):<br /><textarea name="actualresults" rows="5" cols="50" class="actualresults"></textarea></p>
                 </div>
                 <input type="submit" id="save" value="Save">
             </form>
