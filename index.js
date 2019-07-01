@@ -250,12 +250,11 @@ function tasks(data) {
             <table id="tasks" border="1">`
     for(var i=0; i<data.length; i++) {
         const row = data[i];
-        const number = safe(row['number']);
         const title = safe(row['title']);
         const link = safe(row['link']);
         result += `
                 <tr>
-                    <td><b>${number}</b></td>`
+                    <td><b>${i+1}</b></td>`
         const passed = safe(row['passed']);
         if (passed=='TRUE') {
             result += `
@@ -272,7 +271,7 @@ function tasks(data) {
         result += `<a href="${link}" target="_blank">${title}</a></td>
                     <td>
                         <form action="." method="post">
-                            <input type="hidden" name="task" value="${number}">
+                            <input type="hidden" name="task" value="${i}">
                             <button type="submit">Edit</button>
                         </form>
                     </td>
