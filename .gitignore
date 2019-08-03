@@ -1,3 +1,4 @@
+google-sheets-node
 node_modules
 bin
 .env
@@ -6,3 +7,5 @@ public/tasks.html
 public/test.html
 public/view.html
 public/failed.html
+
+pw.htpasswd
