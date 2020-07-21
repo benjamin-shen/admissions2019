@@ -1,5 +1,5 @@
 # admissions2019
-Web Application for the 2019 Admissions Project
+NodeJS Web Application for the 2019 Admissions Project
 
 ## disclaimer
-Incomplete code, use as reference only.
+This code will not work properly by itself. Use as reference only.
